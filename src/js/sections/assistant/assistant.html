@@ -1,0 +1,37 @@
+<div class="assist-controls">
+  <button
+    ng-click="startListen()"
+    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect action-button"
+  >
+    <i class="material-icons">fiber_manual_record</i>
+  </button>
+  <div class="assist-options-group">
+    <button
+      class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect"
+      ng-click="toggleMute()"
+    >
+      <i class="material-icons">{{isMute ? 'mic_off' : 'mic'}}</i>
+    </button>
+    <button
+      class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect"
+      ng-click="toggleQuiet()"
+    >
+      <i class="material-icons">{{isQuiet ? 'volume_off' : 'volume_up'}}</i>
+    </button>
+    <!-- <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+      <i class="material-icons">extension</i>
+    </button> -->
+  </div>
+  <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect settings-button">
+    <i class="material-icons">settings</i>
+  </button>
+</div>
+<div class="assist-body">
+  <div class="assist-app">
+    <assist-processing status="assistStatus"></assist-processing>
+    <span class="assist-response">Hi! How can I help you?</span>
+  </div>
+</div>
+<div class="assist-more">
+
+</div>
