@@ -3,6 +3,8 @@ import template from './assistant.html';
 import Speech from 'speak-tts';
 import './assist-processing/assist-processing';
 import { assistStatuses } from '../../constants/assist-statuses';
+import annyang from 'annyang';
+// import 'speechkitt/dist/speechkitt.min.js';
 
 angular.module('scarlettModule').component('assistant', {
   template,
@@ -11,12 +13,19 @@ angular.module('scarlettModule').component('assistant', {
     const speech = new Speech();
     const say = (text) => {
       return speech.speak({
-        text: 'Hello, how are you today ?',
+        text,
       }).then(() => {
           console.log("Success !")
       }).catch(e => {
           console.error("An error occurred :", e)
       })
+    };
+
+    const feedback = (text) => {
+      if (!$scope.isQuiet) {
+        say(text);
+      };
+      $scope.assistFeedback = text;
     };
 
     speech.init().then((data) => {
@@ -39,22 +48,46 @@ angular.module('scarlettModule').component('assistant', {
          }
     });
 
+    $scope.assistFeedback = 'Hi! How can I help you?';
+
+    let listeningTimemout;
+    const invokeListeningTimemout = () => {
+      listeningTimemout = $timeout(() => {
+        $scope.assistStatus = assistStatuses.WAITING;
+        $scope.assistFeedback = 'Ask me about something.';
+      }, 5000);
+    };
+
     $scope.assistStatus = assistStatuses.WAITING;
     $scope.startListen = () => {
       $scope.assistStatus = assistStatuses.LISTENING;
-      const listeningTimemout = $timeout(() => {
-        $scope.assistStatus = assistStatuses.WAITING;
-      }, 3000);
+      feedback('I am listening you.');
+      invokeListeningTimemout();
     };
 
     $scope.isQuiet = false;
     $scope.toggleQuiet = () => {
       $scope.isQuiet = !$scope.isQuiet;
-    }
+    };
 
     $scope.isMute = false;
     $scope.toggleMute = () => {
       $scope.isMute = !$scope.isMute;
-    }
+    };
+
+    annyang.addCommands({
+      'Scarlett': () => {
+        $scope.startListen();
+        $scope.$digest();
+      },
+      'Hello': () => {
+        if ($scope.assistStatus === assistStatuses.LISTENING) {
+          feedback('Hi!');
+          $scope.$digest();
+        };
+      }
+    });
+
+    annyang.start();
   }
 });
