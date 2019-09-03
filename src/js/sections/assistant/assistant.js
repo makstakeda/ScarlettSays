@@ -61,7 +61,7 @@ angular.module('scarlettModule').component('assistant', {
     $scope.assistStatus = assistStatuses.WAITING;
     $scope.startListen = () => {
       $scope.assistStatus = assistStatuses.LISTENING;
-      feedback('I am listening you.');
+      feedback('Yes.');
       invokeListeningTimemout();
     };
 
@@ -73,6 +73,15 @@ angular.module('scarlettModule').component('assistant', {
     $scope.isMute = false;
     $scope.toggleMute = () => {
       $scope.isMute = !$scope.isMute;
+      if ($scope.isMute) {
+        $scope.assistFeedback = 'I do not disturb you.';
+        $scope.assistStatus = assistStatuses.SLEEPING;
+        annyang.abort();
+      } else {
+        $scope.assistFeedback = 'Ask me about something.';
+        $scope.assistStatus = assistStatuses.WAITING;
+        annyang.start();
+      };
     };
 
     annyang.addCommands({

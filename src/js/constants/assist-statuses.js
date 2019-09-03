@@ -1,5 +1,6 @@
 export const assistStatuses = {
   WAITING: 'waiting',
   LISTENING: 'listening',
-  LOADING: 'loading'
+  LOADING: 'loading',
+  SLEEPING: 'sleeping'
 };
