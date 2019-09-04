@@ -4,26 +4,35 @@ import Speech from 'speak-tts';
 import './assist-processing/assist-processing';
 import { assistStatuses } from '../../constants/assist-statuses';
 import annyang from 'annyang';
-// import 'speechkitt/dist/speechkitt.min.js';
+import { dataSearch } from './base-modules/data-search';
 
 angular.module('scarlettModule').component('assistant', {
   template,
   bindings: {},
   controller: function($rootScope, $scope, $http, $document, $timeout) {
-    const speech = new Speech();
-    const say = (text) => {
-      return speech.speak({
-        text,
-      }).then(() => {
-          console.log("Success !")
-      }).catch(e => {
-          console.error("An error occurred :", e)
-      })
-    };
 
-    const feedback = (text) => {
+    // put $http.get on window object to simplify writing snippets
+    window.$http = $http.get;
+
+    const speech = new Speech();
+    const say = (text) => speech.speak({
+      text,
+      listeners: {
+        onend: () => {}
+      }
+    })
+      // .then(() => console.log("Success !"))
+      // .catch(e => console.error("An error occurred :", e));
+
+    const feedback = (text, read) => {
       if (!$scope.isQuiet) {
-        say(text);
+        say(text).then(() => {
+          if (read) {
+            $scope.assistStatus = assistStatuses.WAITING;
+            $scope.assistFeedback = 'Ask me about something.';
+            $scope.$digest();
+          };
+        });
       };
       $scope.assistFeedback = text;
     };
@@ -43,7 +52,7 @@ angular.module('scarlettModule').component('assistant', {
          'splitSentences': true,
          'listeners': {
              'onvoiceschanged': (voices) => {
-                 console.log("Event voiceschanged", voices)
+                 // console.log("Event voiceschanged", voices)
              }
          }
     });
@@ -58,10 +67,19 @@ angular.module('scarlettModule').component('assistant', {
       }, 5000);
     };
 
+    const clearListeningTimemout = () => {
+      $timeout.cancel(listeningTimemout);
+    };
+
+    const delayListeningTimemout = () => {
+      $timeout.cancel(listeningTimemout);
+      invokeListeningTimemout();
+    };
+
     $scope.assistStatus = assistStatuses.WAITING;
     $scope.startListen = () => {
       $scope.assistStatus = assistStatuses.LISTENING;
-      feedback('Yes.');
+      feedback('Yes.', false);
       invokeListeningTimemout();
     };
 
@@ -85,16 +103,24 @@ angular.module('scarlettModule').component('assistant', {
     };
 
     annyang.addCommands({
-      'Scarlett': () => {
+      ['Scarlett']: () => {
+        delayListeningTimemout();
         $scope.startListen();
         $scope.$digest();
       },
-      'Hello': () => {
+      ['Hello']: (name) => {
         if ($scope.assistStatus === assistStatuses.LISTENING) {
-          feedback('Hi!');
+          clearListeningTimemout();
+          feedback('Hi!', true);
           $scope.$digest();
         };
-      }
+      },
+      [dataSearch.input]: (value) => Promise.resolve(dataSearch.output(value))
+        .then(response => {
+          clearListeningTimemout();
+          feedback(response, true);
+          $scope.$digest();
+        })
     });
 
     annyang.start();
