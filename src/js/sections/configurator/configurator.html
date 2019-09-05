@@ -1,0 +1,36 @@
+<div class="assist-sidebar">
+  <a href="/">
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect settings-button">
+      <i class="material-icons">chevron_left</i>
+    </button>
+  </a>
+</div>
+<div class="assist-body">
+  <div class="assist-config-tabs">
+    <button
+      ng-click="configTab = 'engine'"
+      class="mdl-button mdl-js-button mdl-button--raised"
+    >
+      Voice Engine
+    </button><button
+      ng-click="configTab = 'snippets'"
+      class="mdl-button mdl-js-button mdl-button--raised"
+    >
+      Snippets
+    </button><button
+      ng-click="configTab = 'snippets'"
+      class="mdl-button mdl-js-button mdl-button--raised"
+    >
+      About
+    </button>
+  </div>
+  <div class="assist-config-content">
+    <div ng-show="configTab === 'engine'">
+      <h1>Voice Engine</h1>
+      <div id="snippets-editor" style="width: 500px; height: 500px;"></div>
+    </div>
+    <div ng-if="configTab === 'snippets'">
+      <h1>Snippets</h1>
+    </div>
+  </div>
+</div>

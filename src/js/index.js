@@ -7,3 +7,4 @@ import angular from 'angular';
 import '../js/app';
 import './../styles.less';
 import '../js/sections/assistant/assistant';
+import '../js/sections/configurator/configurator';

@@ -9,6 +9,9 @@ scarlettModule.config(function($routeProvider) {
   .when('/', {
     template: '<assistant></assistant>'
   })
+  .when('/config', {
+    template: '<configurator></configurator>'
+  })
   .otherwise({
     redirectTo: '/'
   });

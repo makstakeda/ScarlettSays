@@ -20,7 +20,7 @@ body {
   background-attachment: fixed;
 }
 
-div.assist-controls {
+div.assist-sidebar {
   position: fixed;
   border-right: 1px solid fade(@color-white, 10%);
   background: fade(@color-white, 5%);
@@ -82,6 +82,27 @@ div.assist-body {
       display: block;
       text-align: center;
       margin: 10px;
+    }
+  }
+  div.assist-config-tabs {
+    padding-bottom: 20px;
+    border-bottom: 2px solid @color-yellow;
+
+    button {
+      color: @color-white;
+      background: @color-red;
+      margin-right: 10px;
+    }
+  }
+  div.assist-config-content {
+    margin-top: 10px;
+    div {
+      h1 {
+        margin: 0px;
+        margin-bottom: 10px;
+        color: @color-yellow;
+        font-size: 46px;
+      }
     }
   }
 }
