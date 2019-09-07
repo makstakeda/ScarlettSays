@@ -14,24 +14,20 @@
       <stop
         offset="0%"
         stop-color="{{$ctrl.status === assistStatuses.LISTENING ? '#F29F05' : '#D93030'}}"
-        fill-opacity="0"
       />
       <stop 
         offset="100%"
         stop-color="{{$ctrl.status === assistStatuses.LISTENING ? '#F29F05' : '#011126'}}"
-        fill-opacity="1"
       />
     </linearGradient>
     <linearGradient id="linear-gradient" ng-if="$ctrl.status === assistStatuses.SLEEPING">
       <stop
         offset="0%"
         stop-color="#2B2B2B"
-        fill-opacity="0"
       />
       <stop 
         offset="100%"
         stop-color="#2B2B2B"
-        fill-opacity="1"
       />
     </linearGradient>
     <path

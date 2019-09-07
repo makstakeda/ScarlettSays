@@ -25,6 +25,17 @@ angular.module('scarlettModule').component('assistant', {
       // .then(() => console.log("Success !"))
       // .catch(e => console.error("An error occurred :", e));
 
+    $scope.assistStack = [
+      {
+        input: 'hello',
+        output: 'corresponed to hello'
+      }
+    ];
+
+    $scope.clearStack = () => {
+      $scope.assistStack = [];
+    };
+
     const feedback = (text, read) => {
       if (!$scope.isQuiet) {
         say(text).then(() => {

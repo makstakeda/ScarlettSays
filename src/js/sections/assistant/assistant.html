@@ -27,9 +27,26 @@
 </div>
 <div class="assist-body">
   <div class="assist-app">
-    <div>
-      <assist-processing status="assistStatus"></assist-processing>
-      <span class="assist-response">{{assistFeedback}}</span>
+    <assist-processing status="assistStatus"></assist-processing>
+    <span ng-if="!assistStack.length" class="assist-response">{{assistFeedback}}</span>
+    <div class="assist-panel stack-panel" ng-if="assistStack.length">
+      <div class="panel-nav">
+        <a href="/">
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" ng-click="clearStack()">
+            <i class="material-icons">delete_sweep</i>
+          </button>
+        </a>
+      </div>
+      <div class="assist-stack">
+        <div ng-repeat="command in assistStack">
+          <span class="mdl-chip command-input">
+              <span class="mdl-chip__text">{{command.input}}</span>
+          </span>
+          <span class="mdl-chip command-output">
+              <span class="mdl-chip__text">{{command.output}}</span>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 @color-dark: #011126;
 @color-blue: #23518C;
+@color-green: #067302;
 @color-yellow: #F2B705;
 @color-orange: #F29F05;
 @color-red: #D93030;
@@ -93,14 +94,47 @@ div.assist-body {
       margin: 10px;
     }
   }
-  div.config-panel {
+
+  div.assist-panel {
     border: 1px solid fade(@color-white, 10%);
     background: fade(@color-white, 5%);
     padding: 20px;
     border-radius: 2px;
     box-shadow: @box-shadow-outer;
+    &.stack-panel {
+      height: calc(~'100% - 330px');
+      margin-top: 20px;
+    }
 
-    div.config-nav {
+    div.assist-stack {
+      background: @color-white;
+      width: calc(~'100% - 40px');
+      margin-top: 10px;
+      height: calc(~'100% - 85px');
+      border-radius: 2px;
+      box-shadow: @box-shadow-outer;
+      padding: 20px;
+
+      span.command-input {
+        display: block;
+        width: fit-content;
+        width: -moz-fit-content;
+        background: @color-green;
+        color: @color-white;
+        margin-bottom: 10px;
+      }
+
+      span.command-output {
+        display: block;
+        width: fit-content;
+        width: -moz-fit-content;
+        background: @color-red;
+        color: @color-white;
+        margin-bottom: 10px;
+      }
+    }
+
+    div.panel-nav {
       text-align: right;
       button {
         color: @color-white;
