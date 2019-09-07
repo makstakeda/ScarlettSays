@@ -18,22 +18,18 @@
     >
       <i class="material-icons">{{isQuiet ? 'volume_off' : 'volume_up'}}</i>
     </button>
-    <!-- <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-      <i class="material-icons">extension</i>
-    </button> -->
   </div>
   <a href="/config">
     <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect settings-button">
-      <i class="material-icons">settings</i>
+      <i class="material-icons">extension</i>
     </button>
   </a>
 </div>
 <div class="assist-body">
   <div class="assist-app">
-    <assist-processing status="assistStatus"></assist-processing>
-    <span class="assist-response">{{assistFeedback}}</span>
+    <div>
+      <assist-processing status="assistStatus"></assist-processing>
+      <span class="assist-response">{{assistFeedback}}</span>
+    </div>
   </div>
-</div>
-<div class="assist-more">
-
 </div>

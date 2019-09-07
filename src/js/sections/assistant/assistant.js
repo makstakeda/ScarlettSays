@@ -10,6 +10,7 @@ angular.module('scarlettModule').component('assistant', {
   template,
   bindings: {},
   controller: function($rootScope, $scope, $http, $document, $timeout) {
+    componentHandler.upgradeAllRegistered();
 
     // put $http.get on window object to simplify writing snippets
     window.$http = $http.get;
@@ -39,6 +40,7 @@ angular.module('scarlettModule').component('assistant', {
 
     speech.init().then((data) => {
         // The "data" object contains the list of available voices and the voice synthesis params
+        console.log(data);
         // say('Speech is ready, voices are available');
     }).catch(e => {
         console.error("An error occured while initializing : ", e)

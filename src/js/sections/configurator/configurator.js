@@ -9,7 +9,8 @@ angular.module('scarlettModule').component('configurator', {
   template,
   bindings: {},
   controller: function($rootScope, $scope, $http, $document, $timeout) {
-    $scope.configTab = 'engine';
+    componentHandler.upgradeAllRegistered();
+    $scope.configTab = 'snippets-reg';
     const myCodeMirror = CodeMirror(document.getElementById('snippets-editor'), {
       value: `{
   input: 'what time is now?',

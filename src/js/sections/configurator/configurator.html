@@ -1,36 +1,37 @@
-<div class="assist-sidebar">
-  <a href="/">
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect settings-button">
-      <i class="material-icons">chevron_left</i>
-    </button>
-  </a>
-</div>
 <div class="assist-body">
-  <div class="assist-config-tabs">
-    <button
-      ng-click="configTab = 'engine'"
-      class="mdl-button mdl-js-button mdl-button--raised"
-    >
-      Voice Engine
-    </button><button
-      ng-click="configTab = 'snippets'"
-      class="mdl-button mdl-js-button mdl-button--raised"
-    >
-      Snippets
-    </button><button
-      ng-click="configTab = 'snippets'"
-      class="mdl-button mdl-js-button mdl-button--raised"
-    >
-      About
-    </button>
-  </div>
-  <div class="assist-config-content">
-    <div ng-show="configTab === 'engine'">
-      <h1>Voice Engine</h1>
-      <div id="snippets-editor" style="width: 500px; height: 500px;"></div>
-    </div>
-    <div ng-if="configTab === 'snippets'">
-      <h1>Snippets</h1>
+  <div class="assist-app">
+    <div class="config-panel">
+      <div class="config-nav">
+        <a href="/">
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
+            <i class="material-icons">close</i>
+          </button>
+        </a>
+      </div>
+      <div class="assist-config-tabs">
+        <button
+          ng-click="configTab = 'snippets-lib'"
+          ng-class="configTab === 'snippets-lib' ? 'active' : ''"
+          class="mdl-button mdl-js-button mdl-js-ripple-effect"
+        >
+          Snippets Library
+        </button>
+        <button
+          ng-click="configTab = 'snippets-reg'"
+          ng-class="configTab === 'snippets-reg' ? 'active' : ''"
+          class="mdl-button mdl-js-button mdl-js-ripple-effect"
+        >
+          Register Snippet
+        </button>
+      </div>
+      <div class="assist-config-content">
+        <div ng-show="configTab === 'snippets-reg'">
+          <div id="snippets-editor"></div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect submit-config">
+            Save Snippet
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
