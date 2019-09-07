@@ -49,13 +49,10 @@ angular.module('scarlettModule').component('assistant', {
       $scope.assistFeedback = text;
     };
 
-    speech.init().then((data) => {
-        // The "data" object contains the list of available voices and the voice synthesis params
-        console.log(data);
-        // say('Speech is ready, voices are available');
-    }).catch(e => {
-        console.error("An error occured while initializing : ", e)
-    })
+    speech.init().catch(e => {
+      console.error("An error occured while initializing : ", e)
+    });
+
     speech.init({
       'volume': 1,
          'lang': 'en-GB',
@@ -93,6 +90,9 @@ angular.module('scarlettModule').component('assistant', {
     $scope.startListen = () => {
       $scope.assistStatus = assistStatuses.LISTENING;
       feedback('Yes.', false);
+      if ($scope.assistStack.length) {
+        $scope.assistStack.push({ output: 'Yes' });
+      };
       invokeListeningTimemout();
     };
 
@@ -106,6 +106,9 @@ angular.module('scarlettModule').component('assistant', {
       $scope.isMute = !$scope.isMute;
       if ($scope.isMute) {
         $scope.assistFeedback = 'I do not disturb you.';
+        if ($scope.assistStack.length) {
+          $scope.assistStack.push({ output: 'I do not disturb you' });
+        };
         $scope.assistStatus = assistStatuses.SLEEPING;
         annyang.abort();
       } else {
@@ -130,6 +133,7 @@ angular.module('scarlettModule').component('assistant', {
       },
       [dataSearch.input]: (value) => Promise.resolve(dataSearch.output(value))
         .then(response => {
+          $scope.assistStack.push({ input: value, output: response })
           clearListeningTimemout();
           feedback(response, true);
           $scope.$digest();

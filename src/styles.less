@@ -102,7 +102,7 @@ div.assist-body {
     border-radius: 2px;
     box-shadow: @box-shadow-outer;
     &.stack-panel {
-      height: calc(~'100% - 330px');
+      height: calc(~'100vh - 410px');
       margin-top: 20px;
     }
 
@@ -114,6 +114,7 @@ div.assist-body {
       border-radius: 2px;
       box-shadow: @box-shadow-outer;
       padding: 20px;
+      overflow-y: auto;
 
       span.command-input {
         display: block;
@@ -122,6 +123,10 @@ div.assist-body {
         background: @color-green;
         color: @color-white;
         margin-bottom: 10px;
+        height: auto;
+        span {
+          white-space: normal;
+        }
       }
 
       span.command-output {
@@ -131,6 +136,10 @@ div.assist-body {
         background: @color-red;
         color: @color-white;
         margin-bottom: 10px;
+        height: auto;
+        span {
+          white-space: normal;
+        }
       }
     }
 

@@ -39,10 +39,10 @@
       </div>
       <div class="assist-stack">
         <div ng-repeat="command in assistStack">
-          <span class="mdl-chip command-input">
+          <span ng-if="command.input" class="mdl-chip command-input">
               <span class="mdl-chip__text">{{command.input}}</span>
           </span>
-          <span class="mdl-chip command-output">
+          <span ng-if="command.output" class="mdl-chip command-output">
               <span class="mdl-chip__text">{{command.output}}</span>
           </span>
         </div>
