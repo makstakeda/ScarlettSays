@@ -3,6 +3,7 @@ const argv = require('yargs').argv;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const router = require('./src/server/router');
 
 const isDevelopment = argv.mode === 'development';
 const isProduction = !isDevelopment;
@@ -115,7 +116,8 @@ const config = {
     port: 9084,
     compress: true,
     open: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    before: (app, server) => router(app, server)
   }
 };
 

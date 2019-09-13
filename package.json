@@ -54,6 +54,7 @@
     "yargs": "^13.2.2"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "angular": "^1.7.8",
     "angular-route": "^1.7.8",
     "annyang": "^2.6.1",

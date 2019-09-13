@@ -5,15 +5,39 @@ import './assist-processing/assist-processing';
 import { assistStatuses } from '../../constants/assist-statuses';
 import annyang from 'annyang';
 import { dataSearch } from './base-modules/data-search';
+import SnippetsManager from './utilities/snippets-manager';
 
 angular.module('scarlettModule').component('assistant', {
   template,
   bindings: {},
-  controller: function($rootScope, $scope, $http, $document, $timeout) {
+  controller: function($rootScope, $scope, $http, $document, $timeout, $window) {
     componentHandler.upgradeAllRegistered();
 
-    // put $http.get on window object to simplify writing snippets
-    window.$http = $http.get;
+    const userSnippets = {};
+    const callback = () => {
+      $scope.assistStack.push({ input: value, output: response })
+      clearListeningTimemout();
+      feedback(response, true);
+      $scope.$digest();
+    };
+
+    const snippetsManager = new SnippetsManager(userSnippets, callback);
+
+    // create global object for snippets registration
+    $window.$http = $http.get;
+    $window.SCARLETT = {
+      ...snippetsManager,
+      httpGet: $http.get
+    };
+
+    // register existed snippets
+    $http.get('/snippets')
+      .then(response => {
+        response.data.forEach(element => {
+          require(`../../../../snippets/${element}`);
+        });
+        console.log(SCARLETT);
+      });
 
     const speech = new Speech();
     const say = (text) => speech.speak({
@@ -25,12 +49,7 @@ angular.module('scarlettModule').component('assistant', {
       // .then(() => console.log("Success !"))
       // .catch(e => console.error("An error occurred :", e));
 
-    $scope.assistStack = [
-      {
-        input: 'hello',
-        output: 'corresponed to hello'
-      }
-    ];
+    $scope.assistStack = [];
 
     $scope.clearStack = () => {
       $scope.assistStack = [];
@@ -130,14 +149,14 @@ angular.module('scarlettModule').component('assistant', {
           feedback('Hi!', true);
           $scope.$digest();
         };
-      },
-      [dataSearch.input]: (value) => Promise.resolve(dataSearch.output(value))
-        .then(response => {
-          $scope.assistStack.push({ input: value, output: response })
-          clearListeningTimemout();
-          feedback(response, true);
-          $scope.$digest();
-        })
+      }
+      // [dataSearch.input]: (value) => Promise.resolve(dataSearch.output(value))
+      //   .then(response => {
+      //     $scope.assistStack.push({ input: value, output: response })
+      //     clearListeningTimemout();
+      //     feedback(response, true);
+      //     $scope.$digest();
+      //   })
     });
 
     annyang.start();
