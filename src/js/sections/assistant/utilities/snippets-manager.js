@@ -8,8 +8,8 @@ export default class SnippetsManager {
   };
 
   registerSnippet = (snippet) => {
-    this._register[snippet.input] = (value) => Promise.resolve(snippet.output(value))
-      .then(response => this._callback(response))
+    this._register[snippet.input] = (value) => Promise.all([value, snippet.output(value)])
+      .then(([value, response]) => this._callback(value, response))
       .catch(error => console.error(error));
   };
 
