@@ -25,10 +25,18 @@ const router = (app, server) => {
   });
   app.post('/save-snippet', urlencodedParser, function(req, res) {
     if (req.method === 'POST') {
-      fs.writeFile(`${snippetsDirPath}/snippet.js`, req.body.settingsBody, function (error) {
-        if (error) throw error;
-        res.end();
-      }); 
+      let requestBody = '';
+      req.on('data', buffer => {
+        requestBody += buffer.toString();
+      });
+      req.on('end', () => {
+        const parsedRequestBody = JSON.parse(requestBody);
+        console.log(parsedRequestBody.file, parsedRequestBody.body);
+        fs.writeFile(`${snippetsDirPath}/${parsedRequestBody.file}`, parsedRequestBody.body, function (error) {
+          if (error) throw error;
+          res.end();
+        }); 
+      });
     } else {
       res.end(`[${req.method}] method is unsupported on /save-snippet`);
     };

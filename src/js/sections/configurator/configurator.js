@@ -42,5 +42,21 @@ angular.module('scarlettModule').component('configurator', {
         $scope.$digest();
       });
     
+    let snippetOnViewSrc;
+    $scope.getSnippet = async snippet => {
+      const snippetSrc = await $http.get(`/read-snippet?file=${snippet.file}`);
+      $scope.snippetOnView = snippet.file;
+      $scope.$digest();
+      snippetOnViewSrc = CodeMirror(document.getElementById('snippets-lib-editor'), {
+        value: snippetSrc.data,
+        mode:  "javascript",
+        theme: 'material',
+        lineNumbers: true
+      });
+    };
+
+    $scope.updateSnippet = () => {
+      $http.post('/save-snippet', { body: snippetOnViewSrc.getValue(), file: $scope.snippetOnView });
+    };
   }
 });
