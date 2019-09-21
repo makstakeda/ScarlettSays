@@ -25,6 +25,17 @@
         </button>
       </div>
       <div class="assist-config-content">
+        <div ng-show="configTab === 'snippets-lib'">
+          <div class="mdl-list snippets-library">
+            <div class="mdl-list__item" ng-repeat="snippet in listedSnippets">
+              <span class="mdl-list__item-primary-content">
+                {{snippet.input}}
+              </span>
+              <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-list__item-secondary-action"><i class="material-icons">edit</i></button>
+              <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-list__item-secondary-action"><i class="material-icons">delete</i></button>
+            </div>
+          </div>
+        </div>
         <div ng-show="configTab === 'snippets-reg'">
           <div id="snippets-editor"></div>
           <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect submit-config">

@@ -209,3 +209,25 @@ div.assist-body {
     }
   }
 }
+
+div.snippets-library {
+  width: 100%;
+  height: 540px;
+  border-radius: 2px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: @color-dark;
+  box-shadow: @box-shadow-outer;
+  div.mdl-list__item {
+    border-bottom: 1px dashed @color-dark-gray;
+
+    span.mdl-list__item-primary-content {
+      color: @color-dark-gray;
+    }
+    button.mdl-list__item-secondary-action {
+      i {
+        color: @color-red;
+      }
+    }
+  }
+}

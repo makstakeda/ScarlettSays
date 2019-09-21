@@ -10,7 +10,7 @@ angular.module('scarlettModule').component('configurator', {
   bindings: {},
   controller: function($rootScope, $scope, $http, $document, $timeout) {
     componentHandler.upgradeAllRegistered();
-    $scope.configTab = 'snippets-reg';
+    $scope.configTab = 'snippets-lib';
     const myCodeMirror = CodeMirror(document.getElementById('snippets-editor'), {
       value: `{
   input: 'what time is now?',
@@ -23,5 +23,24 @@ angular.module('scarlettModule').component('configurator', {
       theme: 'material',
       lineNumbers: true
     });
+
+    const listedSnippets = [];
+    $http.get('/snippets')
+      .then(async response => {
+        const inputRegEx = /input:([^]+)(\'|\"),/;
+        const quotesRegEx = /"([^"]+)"|'([^']+)'/;
+        const snippets = response.data;
+        for (let index = 0; index < snippets.length; index++) {
+          const snippetSrc = await $http.get(`/read-snippet?file=${snippets[index]}`);
+          const inputProp = snippetSrc.data.match(inputRegEx);
+          if (inputProp) {
+            const extractedInput = inputProp[0].match(quotesRegEx);
+            listedSnippets.push({ input: extractedInput[0].slice(1, -1), file: snippets[index] });
+          }
+        }
+        $scope.listedSnippets = listedSnippets;
+        $scope.$digest();
+      });
+    
   }
 });

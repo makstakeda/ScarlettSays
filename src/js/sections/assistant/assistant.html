@@ -33,17 +33,17 @@
       <div class="panel-nav">
         <a href="/">
           <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" ng-click="clearStack()">
-            <i class="material-icons">delete_sweep</i>
+            <i class="material-icons">delete</i>
           </button>
         </a>
       </div>
       <div class="assist-stack">
         <div ng-repeat="command in assistStack">
           <span ng-if="command.input" class="mdl-chip command-input">
-              <span class="mdl-chip__text">{{command.input}}</span>
+            <span class="mdl-chip__text">{{command.input}}</span>
           </span>
           <span ng-if="command.output" class="mdl-chip command-output">
-              <span class="mdl-chip__text">{{command.output}}</span>
+            <span class="mdl-chip__text">{{command.output}}</span>
           </span>
         </div>
       </div>

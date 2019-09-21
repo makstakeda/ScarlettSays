@@ -33,6 +33,17 @@ const router = (app, server) => {
       res.end(`[${req.method}] method is unsupported on /save-snippet`);
     };
   });
+  app.get('/read-snippet', urlencodedParser, function(req, res) {
+    fs.readFile(`${snippetsDirPath}/${req.query.file}`, 'utf8', function (error, data) {
+      if (error) {
+        res.writeHead(404);
+        res.write('Whoops! File not found!');
+      } else {
+        res.write(data);
+      }
+      res.end();
+    });
+  });
 };
 
 module.exports = router;
