@@ -11,7 +11,7 @@ angular.module('scarlettModule').component('configurator', {
   controller: function($rootScope, $scope, $http, $document, $timeout) {
     componentHandler.upgradeAllRegistered();
     $scope.configTab = 'snippets-lib';
-    const myCodeMirror = CodeMirror(document.getElementById('snippets-editor'), {
+    const newSnippetSrc = CodeMirror(document.getElementById('snippets-editor'), {
       value: `{
   input: 'what time is now?',
   output: () => {
@@ -24,11 +24,12 @@ angular.module('scarlettModule').component('configurator', {
       lineNumbers: true
     });
 
+    const inputRegEx = /input:([^]+)(\'|\"),/;
+    const quotesRegEx = /"([^"]+)"|'([^']+)'/;
+
     const listedSnippets = [];
     $http.get('/snippets')
       .then(async response => {
-        const inputRegEx = /input:([^]+)(\'|\"),/;
-        const quotesRegEx = /"([^"]+)"|'([^']+)'/;
         const snippets = response.data;
         for (let index = 0; index < snippets.length; index++) {
           const snippetSrc = await $http.get(`/read-snippet?file=${snippets[index]}`);
@@ -57,6 +58,16 @@ angular.module('scarlettModule').component('configurator', {
 
     $scope.updateSnippet = () => {
       $http.post('/save-snippet', { body: snippetOnViewSrc.getValue(), file: $scope.snippetOnView });
+    };
+
+    $scope.createSnippet = () => {
+      const body = newSnippetSrc.getValue();
+      const inputProp = body.match(inputRegEx);
+      if (inputProp) {
+        // to-do: remove spec chars from filename
+        const extractedInput = inputProp[0].match(quotesRegEx);
+        $http.post('/save-snippet', { body: body, file: `${extractedInput[0].slice(1, -1)}.js` });
+      }
     };
   }
 });

@@ -62,7 +62,10 @@
         <div ng-show="configTab === 'snippets-reg'">
           <div id="snippets-editor"></div>
           <div class="snippets-editor-controls">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect submit-config">
+            <button
+              class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect submit-config"
+              ng-click="createSnippet()"
+            >
               Save Snippet
             </button>
           </div>
