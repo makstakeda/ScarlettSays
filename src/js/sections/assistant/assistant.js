@@ -1,31 +1,27 @@
-import _ from 'lodash';
 import template from './assistant.html';
-import Speech from 'speak-tts';
 import './assist-processing/assist-processing';
 import { assistStatuses } from '../../constants/assist-statuses';
-import annyang from 'annyang';
-import { dataSearch } from './base-modules/data-search';
 import SnippetsManager from './utilities/snippets-manager';
 import basicPhrases from './utilities/basic-phrases';
 import SpeechModule from './utilities/speech-module';
 
 angular.module('scarlettModule').component('assistant', {
   template,
-  bindings: {},
-  controller: function($rootScope, $scope, $http, $document, $timeout, $window) {
+  controller: function($scope, $http, $timeout, $window) {
     componentHandler.upgradeAllRegistered();
 
     const speechModule = new SpeechModule();
 
     const feedback = (text, read) => {
       if (!$scope.isQuiet) {
-        speechModule.say(text).then(() => {
-          if (read) {
-            $scope.assistStatus = assistStatuses.WAITING;
-            $scope.assistFeedback = basicPhrases.WAITING;
-            $scope.$digest();
-          };
-        });
+        speechModule.say(text)
+          .then(() => {
+            if (read) {
+              $scope.assistStatus = assistStatuses.WAITING;
+              $scope.assistFeedback = basicPhrases.WAITING;
+              $scope.$digest();
+            };
+          });
       };
       $scope.assistFeedback = text;
     };
@@ -41,17 +37,11 @@ angular.module('scarlettModule').component('assistant', {
     const snippetsManager = new SnippetsManager(userSnippets, callback);
 
     // create global object for snippets registration
-    $window.$http = $http.get;
-    $window.SCARLETT = {
-      ...snippetsManager,
-      httpGet: $http.get
-    };
+    $window.SCARLETT = { ...snippetsManager, httpGet: $http.get, httpPost: $http.post };
 
     $scope.assistStack = [];
 
-    $scope.clearStack = () => {
-      $scope.assistStack = [];
-    };
+    $scope.clearStack = () => $scope.assistStack = [];
 
     // get existed snippets and invoke assistant
     $http.get('/snippets')
@@ -59,7 +49,7 @@ angular.module('scarlettModule').component('assistant', {
         response.data.forEach(element => {
           require(`../../../../snippets/${element}`);
         });
-        annyang.addCommands({
+        speechModule.addCommands({
           ['Scarlett']: () => {
             delayListeningTimemout();
             $scope.startListen();
@@ -67,7 +57,7 @@ angular.module('scarlettModule').component('assistant', {
           },
           ...SCARLETT.getSnippets()
         });
-        annyang.start();
+        // annyang.start();
       });
 
     $scope.assistFeedback = basicPhrases.HELLO;
@@ -116,11 +106,11 @@ angular.module('scarlettModule').component('assistant', {
           $scope.assistStack.push({ output: basicPhrases.MUTE });
         };
         $scope.assistStatus = assistStatuses.SLEEPING;
-        annyang.abort();
+        speechModule.stopListen();
       } else {
         $scope.assistFeedback = basicPhrases.WAITING;
         $scope.assistStatus = assistStatuses.WAITING;
-        annyang.start();
+        speechModule.startListen();
       };
     };
   }
