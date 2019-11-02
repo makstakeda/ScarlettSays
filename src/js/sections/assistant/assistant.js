@@ -91,9 +91,6 @@ angular.module('scarlettModule').component('assistant', {
           listeningTimemout.clear();
         };
         $scope.assistFeedback = basicPhrases.MUTE;
-        if ($scope.assistStack.length) {
-          $scope.assistStack.push({ output: basicPhrases.MUTE });
-        };
         $scope.assistStatus = assistStatuses.SLEEPING;
         speechModule.stopListen();
       } else {

@@ -4,7 +4,7 @@
   "description": "Customizable voice assistant",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "prebuild": "rimraf public && npm install",
     "build": "webpack --mode production --colors --progress",
     "prestart": "rimraf public && npm install",
@@ -32,6 +32,7 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
+    "angular-mocks": "^1.7.8",
     "autoprefixer": "^9.5.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.1",
@@ -41,6 +42,8 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.0.6",
     "image-webpack-loader": "^4.6.0",
+    "jest": "^24.9.0",
+    "jest-cli": "^24.9.0",
     "mini-css-extract-plugin": "^0.6.0",
     "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
@@ -68,5 +71,10 @@
     "speak-tts": "^2.0.8",
     "speechkitt": "^1.0.0",
     "text-to-speech-js": "^1.1.9"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(html)$": "<rootDir>/__mocks__/template.js"
+    }
   }
 }
