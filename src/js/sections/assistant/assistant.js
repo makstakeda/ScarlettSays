@@ -28,10 +28,16 @@ angular.module('scarlettModule').component('assistant', {
 
     const userSnippets = {};
     const callback = (value, response) => {
-      $scope.assistStack.push({ input: value, output: response })
-      clearListeningTimemout();
-      feedback(response, true);
-      $scope.$digest();
+      if ($scope.isMute) {
+        if (listeningTimemout) {
+          $timeout.cancel(listeningTimemout);
+        };
+      } else {
+        $scope.assistStack.push({ input: value, output: response })
+        clearListeningTimemout();
+        feedback(response, true);
+        $scope.$digest();
+      };
     };
 
     const snippetsManager = new SnippetsManager(userSnippets, callback);
@@ -40,7 +46,6 @@ angular.module('scarlettModule').component('assistant', {
     $window.SCARLETT = { ...snippetsManager, httpGet: $http.get, httpPost: $http.post };
 
     $scope.assistStack = [];
-
     $scope.clearStack = () => $scope.assistStack = [];
 
     // get existed snippets and invoke assistant
@@ -57,7 +62,6 @@ angular.module('scarlettModule').component('assistant', {
           },
           ...SCARLETT.getSnippets()
         });
-        // annyang.start();
       });
 
     $scope.assistFeedback = basicPhrases.HELLO;
