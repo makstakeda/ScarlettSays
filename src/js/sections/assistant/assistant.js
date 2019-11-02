@@ -4,6 +4,7 @@ import { assistStatuses } from '../../constants/assist-statuses';
 import SnippetsManager from './utilities/snippets-manager';
 import basicPhrases from './utilities/basic-phrases';
 import SpeechModule from './utilities/speech-module';
+import ListeningTimeout from './utilities/listening-timeout';
 
 angular.module('scarlettModule').component('assistant', {
   template,
@@ -11,6 +12,7 @@ angular.module('scarlettModule').component('assistant', {
     componentHandler.upgradeAllRegistered();
 
     const speechModule = new SpeechModule();
+    const listeningTimemout = new ListeningTimeout($scope, $timeout);
 
     const feedback = (text, read) => {
       if (!$scope.isQuiet) {
@@ -29,12 +31,12 @@ angular.module('scarlettModule').component('assistant', {
     const userSnippets = {};
     const callback = (value, response) => {
       if ($scope.isMute) {
-        if (listeningTimemout) {
-          $timeout.cancel(listeningTimemout);
+        if (listeningTimemout.isActive()) {
+          listeningTimemout.clear();
         };
       } else {
         $scope.assistStack.push({ input: value, output: response })
-        clearListeningTimemout();
+        listeningTimemout.clear();
         feedback(response, true);
         $scope.$digest();
       };
@@ -56,7 +58,7 @@ angular.module('scarlettModule').component('assistant', {
         });
         speechModule.addCommands({
           ['Scarlett']: () => {
-            delayListeningTimemout();
+            listeningTimemout.delay();
             $scope.startListen();
             $scope.$digest();
           },
@@ -66,23 +68,6 @@ angular.module('scarlettModule').component('assistant', {
 
     $scope.assistFeedback = basicPhrases.HELLO;
 
-    let listeningTimemout;
-    const invokeListeningTimemout = () => {
-      listeningTimemout = $timeout(() => {
-        $scope.assistStatus = assistStatuses.WAITING;
-        $scope.assistFeedback = basicPhrases.WAITING;
-      }, 5000);
-    };
-
-    const clearListeningTimemout = () => {
-      $timeout.cancel(listeningTimemout);
-    };
-
-    const delayListeningTimemout = () => {
-      $timeout.cancel(listeningTimemout);
-      invokeListeningTimemout();
-    };
-
     $scope.assistStatus = assistStatuses.WAITING;
     $scope.startListen = () => {
       $scope.assistStatus = assistStatuses.LISTENING;
@@ -90,7 +75,7 @@ angular.module('scarlettModule').component('assistant', {
       if ($scope.assistStack.length) {
         $scope.assistStack.push({ output: basicPhrases.READY });
       };
-      delayListeningTimemout();
+      listeningTimemout.delay();
     };
 
     $scope.isQuiet = false;
@@ -102,8 +87,8 @@ angular.module('scarlettModule').component('assistant', {
     $scope.toggleMute = () => {
       $scope.isMute = !$scope.isMute;
       if ($scope.isMute) {
-        if (listeningTimemout) {
-          $timeout.cancel(listeningTimemout);
+        if (listeningTimemout.isActive()) {
+          listeningTimemout.clear();
         };
         $scope.assistFeedback = basicPhrases.MUTE;
         if ($scope.assistStack.length) {

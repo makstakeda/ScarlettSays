@@ -97,6 +97,7 @@ div.assist-body {
     border-radius: 2px;
     box-shadow: @box-shadow-outer;
     width: 768px;
+
     &.stack-panel {
       height: calc(~'100vh - 410px');
       margin-top: 20px;
@@ -120,6 +121,7 @@ div.assist-body {
         color: @color-white;
         margin-bottom: 10px;
         height: auto;
+
         span {
           white-space: normal;
         }
@@ -133,6 +135,7 @@ div.assist-body {
         color: @color-white;
         margin-bottom: 10px;
         height: auto;
+
         span {
           white-space: normal;
         }
@@ -141,21 +144,20 @@ div.assist-body {
 
     div.panel-nav {
       text-align: right;
+
       button {
         color: @color-white;
       }
     }
   }
   div.assist-config-tabs {
-    // padding-bottom: 0px;
     border-bottom: 2px solid @color-yellow;
 
     button {
       color: @color-white;
-      // background: @color-red;
-      // margin-right: 10px;
       border-bottom-left-radius: 0px;
-      border-bottom-right-radius: 0px; 
+      border-bottom-right-radius: 0px;
+
       &.active {
         color: @color-dark;
         background: @color-yellow;
@@ -164,13 +166,16 @@ div.assist-body {
   }
   div.assist-config-content {
     margin-top: 20px;
+
     div {
+
       h1 {
         margin: 0px;
         margin-bottom: 10px;
         color: @color-yellow;
         font-size: 46px;
       }
+
       div#snippets-editor, div#snippets-lib-editor {
         width: 100%;
         height: 500px;
@@ -182,11 +187,14 @@ div.assist-body {
           height: 100%;
         }
       }
+
       div.snippets-editor-controls {
         text-align: right;
       }
+
       table {
         width: 100%;
+
         select {
           border: 1px solid @color-dark-gray;
           border-radius: 2px;
@@ -195,12 +203,14 @@ div.assist-body {
           color: @color-black;
           width: 150px;
         }
+
         label.mdl-switch {
           width: fit-content;
           width: -moz-fit-content;
           padding-left: 36px;
         }
       }
+
       button.submit-config {
         margin-top: 20px;
         background: @color-red;
