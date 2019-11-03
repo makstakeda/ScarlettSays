@@ -21,6 +21,7 @@ import SpeechModule from './utilities/speech-module';
 jest.mock('./utilities/speech-module');
 SpeechModule.prototype.startListen = jest.fn();
 SpeechModule.prototype.stopListen = jest.fn();
+SpeechModule.prototype.addCommands = jest.fn();
 
 window.componentHandler = {
   upgradeAllRegistered: () => {}
@@ -29,11 +30,16 @@ window.componentHandler = {
 describe('assistant', () => {
   let $element;
   let $scope;
+  let httpMock;
+  let windowMock;
 
   beforeEach(() => {
     jest.clearAllMocks();
     angular.mock.module('scarlettModule');
-    inject(($rootScope, $compile) => {
+    inject(($rootScope, $compile, $http, $window) => {
+      httpMock = $http;
+      windowMock = $window;
+      httpMock.get = jest.fn(() => Promise.resolve({ data: [] }));
       $element = angular.element('<assistant></assistant>');
       $compile($element)($rootScope);
       $scope = $element.isolateScope();
@@ -71,5 +77,24 @@ describe('assistant', () => {
     expect($scope.isMute).toBe(false);
     expect(listeningTimeout.isActive).toHaveBeenCalledTimes(1);
     expect(speechModule.startListen).toHaveBeenCalledTimes(1);
+  });
+
+  test('should invoke registered snippets', () => {
+    const speechModule = SpeechModule.mock.instances[0];
+
+    expect(httpMock.get).toHaveBeenCalledTimes(1);
+    expect(httpMock.get).toHaveBeenCalledWith('/snippets');
+    expect(speechModule.addCommands).toHaveBeenCalledTimes(1);
+    expect(Object.keys(speechModule.addCommands.mock.calls[0][0])).toMatchObject(['Scarlett']);
+  });
+
+  test('should create global helper', () => {
+    const scarlettKeys = Object.keys(windowMock.SCARLETT);
+    expect(scarlettKeys.includes('registerSnippet')).toBe(true);
+    expect(scarlettKeys.includes('getSnippets')).toBe(true);
+    expect(scarlettKeys.includes('_register')).toBe(true);
+    expect(scarlettKeys.includes('_callback')).toBe(true);
+    expect(scarlettKeys.includes('httpGet')).toBe(true);
+    expect(scarlettKeys.includes('httpPost')).toBe(true);
   });
 });
