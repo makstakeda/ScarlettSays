@@ -74,7 +74,7 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(html)$": "<rootDir>/__mocks__/template.js"
+      "\\.(html|css|less)$": "<rootDir>/__mocks__/template.js"
     }
   }
 }
