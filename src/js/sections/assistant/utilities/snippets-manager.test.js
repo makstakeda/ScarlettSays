@@ -4,7 +4,7 @@ import SnippetsManager from './snippets-manager';
 describe('SnippetsManager', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  test('should create expected instance of SnippetsManager', async () => {
+  test('should create expected instance', async () => {
     const callback = jest.fn();
     const snippetsManager = new SnippetsManager({}, callback);
     expect(callback).toHaveBeenCalledTimes(0);
