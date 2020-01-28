@@ -24,5 +24,5 @@ export default class ListeningTimeout {
     this.invoke();
   };
 
-  isActive = () => this.instance;
+  isActive = () => !!this.instance;
 };

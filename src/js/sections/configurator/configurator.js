@@ -4,6 +4,7 @@ import CodeMirror from 'codemirror/lib/codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/theme/material.css';
+import { exampleSnippet } from './utilities/example-snippet';
 
 angular.module('scarlettModule').component('configurator', {
   template,
@@ -12,14 +13,8 @@ angular.module('scarlettModule').component('configurator', {
     componentHandler.upgradeAllRegistered();
     $scope.configTab = 'snippets-lib';
     const newSnippetSrc = CodeMirror(document.getElementById('snippets-editor'), {
-      value: `{
-  input: 'what time is now?',
-  output: () => {
-    const date = new Date();
-    return \`\${date.getHours()} hours \${date.getMinutes()} minutes\`
-  },
-}`,
-      mode:  "javascript",
+      value: exampleSnippet,
+      mode:  'javascript',
       theme: 'material',
       lineNumbers: true
     });
@@ -56,17 +51,17 @@ angular.module('scarlettModule').component('configurator', {
       });
     };
 
-    $scope.updateSnippet = () => {
-      $http.post('/save-snippet', { body: snippetOnViewSrc.getValue(), file: $scope.snippetOnView });
+    $scope.updateSnippet = async () => {
+      await $http.post('/save-snippet', { body: snippetOnViewSrc.getValue(), file: $scope.snippetOnView });
     };
 
-    $scope.createSnippet = () => {
+    $scope.createSnippet = async () => {
       const body = newSnippetSrc.getValue();
       const inputProp = body.match(inputRegEx);
       if (inputProp) {
         // to-do: remove spec chars from filename
         const extractedInput = inputProp[0].match(quotesRegEx);
-        $http.post('/save-snippet', { body: body, file: `${extractedInput[0].slice(1, -1)}.js` });
+        await $http.post('/save-snippet', { body: body, file: `${extractedInput[0].slice(1, -1)}.js` });
       }
     };
   }

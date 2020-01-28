@@ -1,7 +1,7 @@
 export default class SnippetsManager {
   constructor(register, callback) {
     if (!register) {
-      throw new Error('Snippets Register is not defined.');
+      throw new Error('Snippets\' Register is not defined.');
     }
     this._register = register;
     this._callback = callback;
