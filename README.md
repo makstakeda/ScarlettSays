@@ -1,6 +1,6 @@
 # ScarlettSays
 
-ScarlettSays is a simple voice assistant's playground for the development purposes. You can set various unique snippets through your own logic and expect a feedback from assistant. Assistant can be set by using the simple JavaScript-based syntax.
+ScarlettSays is a simple voice assistant's playground for the development purposes. It uses the browser speech recognition modules and shows how it can be used for making your own simple voice assistant. You can set various unique snippets through your own logic and expect a feedback from assistant. Assistant can be set by using the simple JavaScript-based syntax.
 
 ## Getting Started With Project
 
@@ -34,23 +34,23 @@ To register the new snippet you should create a JavaScript Object with property 
 The simplest example is the snippet about the current time.
 
 ```JavaScript
-{
+SCARLETT.registerSnippet({
   input: 'what time is now?',
   output: () => {
     const date = new Date();
     return `${date.getHours()} hours ${date.getMinutes()} minutes`
   },
-}
+})
 ```
 
 The property `input` is a `string` to trigger snippet. You can pass a variable by adding `*` before the keyword and, for example, `input` as `tell me about *search` can be triggered by saying `tell me about cats`, `tell me about dogs`, etc.
 
-There is no restrictions about complexity for the method `output` if it returns the valid `string`. You can call external API with `GET` and `POST` methods to retrieve information by using globally available variable `SCARLETT` with `SCARLETT.httpGet` and `SCARLETT.httpPost` where `httpGet` and `httpPost` are wrappers on AngularJS service's methods `$http.get` and `$http.post`. Documentation about the methods can be found [here](https://docs.angularjs.org/api/ng/service/$http#get).
+There is no restrictions about complexity for the method `output` if it returns the valid `string`. You can call external API with `GET` and `POST` methods to retrieve information by using `SCARLETT.httpGet` and `SCARLETT.httpPost` where `httpGet` and `httpPost` are wrappers on AngularJS service's methods `$http.get` and `$http.post`. Documentation about the methods can be found [here](https://docs.angularjs.org/api/ng/service/$http#get).
 
 For example, the next example shows how to get the data from Wikipedia, format it by taking only the first sentences and return to the voice assistant.
 
 ```JavaScript
-{
+SCARLETT.registerSnippet({
   input: 'tell me about *search',
   output: (search) => SCARLETT.httpGet(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${search}&utf8=&format=json&origin=*`)
     .then(response => {
@@ -62,5 +62,5 @@ For example, the next example shows how to get the data from Wikipedia, format i
           return snippet;
         })
     })
-}
+})
 ```
