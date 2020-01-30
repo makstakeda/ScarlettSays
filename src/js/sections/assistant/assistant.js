@@ -57,7 +57,7 @@ angular.module('scarlettModule').component('assistant', {
           require(`../../../../snippets/${element}`);
         });
         speechModule.addCommands({
-          ['Scarlett']: () => {
+          [require('../../../../config.json').INVOCATION_COMMAND]: () => {
             listeningTimemout.delay();
             $scope.startListen();
             $scope.$digest();
